@@ -1,0 +1,91 @@
+<div class="simple-calc">
+    <!-- Displej -->
+    <input type="text" id="calc-input">
+
+    <!-- Čísla -->
+    <button onclick="calcAppend('7')">7</button>
+    <button onclick="calcAppend('8')">8</button>
+    <button onclick="calcAppend('9')">9</button>
+    <button onclick="calcAppend('/')">/</button>
+
+    <button onclick="calcAppend('4')">4</button>
+    <button onclick="calcAppend('5')">5</button>
+    <button onclick="calcAppend('6')">6</button>
+    <button onclick="calcAppend('*')">*</button>
+
+    <button onclick="calcAppend('1')">1</button>
+    <button onclick="calcAppend('2')">2</button>
+    <button onclick="calcAppend('3')">3</button>
+    <button onclick="calcAppend('-')">-</button>
+
+    <button onclick="calcAppend('0')">0</button>
+    <button onclick="calcAppend('.')">.</button>
+    <button onclick="calcResult()" class="op">=</button>
+    <button onclick="calcAppend('+')">+</button>
+
+    <!-- Vymazání -->
+    <button onclick="calcClear()" class="clear">C</button>
+</div>
+
+<style>
+.simple-calc {
+    display: grid;
+    grid-template-columns: repeat(4, 50px);
+    gap: 4px;
+    max-width: 220px;
+    margin: 10px;
+}
+
+#calc-input {
+    grid-column: span 4;
+    text-align: right;
+    padding: 6px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #4fc3f7;
+    color: white;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #0288d1;
+}
+
+button.clear {
+    grid-column: span 4;
+    background-color: #f44336;
+}
+
+button.clear:hover {
+    background-color: #d32f2f;
+}
+</style>
+
+<script>
+  // Přidání čísla nebo operátoru na displej
+function calcAppend(val) {
+    document.getElementById('calc-input').value += val;
+}
+
+  // Výpočet výsledku
+function calcResult() {
+    try {
+    const input = document.getElementById('calc-input');
+    input.value = eval(input.value);
+    } catch(e) {
+    alert('Chyba ve výrazu!');
+    }
+}
+
+  // Vymazání displeje
+function calcClear() {
+    document.getElementById('calc-input').value = '';
+}
+</script>

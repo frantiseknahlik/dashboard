@@ -1,0 +1,85 @@
+<div class="weather-widget">
+    <div class="weather-city" id="weather-city">Načítám...</div>
+    <div class="weather-temp" id="weather-temp">--°C</div>
+    <div class="weather-desc" id="weather-desc">Načítám...</div>
+</div>
+
+<style>
+.weather-widget {
+    width: 200px;
+    padding: 15px;
+    border-radius: 10px;
+    background: lightblue;
+    color: black;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    border: 1px solid #999;
+}
+
+.weather-city {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.weather-temp {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.weather-desc {
+    font-size: 16px;
+    margin-top: 5px;
+}
+</style>
+
+<script>
+// Odkazy na prvky
+let tempEl = document.getElementById("weather-temp");
+let descEl = document.getElementById("weather-desc");
+let cityEl = document.getElementById("weather-city");
+
+// Souřadnice Uherského Hradiště
+let lat = 49.0698;
+let long = 17.4595;
+
+// API pro počasí
+let weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude=" +
+    lat + "&longitude=" + long + "&current_weather=true";
+
+// Načtení počasí
+fetch(weatherUrl)
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        let temp = data.current_weather.temperature;
+        let code = data.current_weather.weathercode;
+
+        tempEl.textContent = temp + "°C";
+        descEl.textContent = getWeatherDescription(code);
+    });
+
+// API pro název města
+let geoUrl = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" +
+    lat + "&longitude=" + long + "&localityLanguage=cs";
+
+fetch(geoUrl)
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        cityEl.textContent = data.city || data.locality || "Neznámé místo";
+    });
+
+// Funkce pro převod kódu počasí
+function getWeatherDescription(code) {
+    if (code === 0) return "Jasno";
+    if (code >= 1 && code <= 3) return "Polojasno";
+    if (code >= 45 && code <= 48) return "Mlha";
+    if (code >= 51 && code <= 67) return "Déšť";
+    if (code >= 71 && code <= 77) return "Sníh";
+    if (code >= 95) return "Bouřka";
+    return "Neznámé";
+}
+</script>
