@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo Widget</title>
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        .input-group,
+        .todo-widget li,
+        .todo-item-content {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .todo-widget ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .completed span {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .todo-widget button {
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="todo-widget" x-data="todoWidget()" x-init="init()">
+    <h3>Úkoly</h3>
+
+    <!-- Vstupní pole -->
+    <div class="input-group">
+        <input 
+            type="text"
+            x-model="newTodo"
+            @keyup.enter="add()"
+            placeholder="Nový úkol..."
+        >
+        <button @click="add()">+</button>
+    </div>
+
+    <!-- Seznam úkolů -->
+    <ul>
+        <template x-for="todo in todos" :key="todo.id">
+            <li :class="{ 'completed': todo.completed }">
+                <div class="todo-item-content">
+                    <input type="checkbox" x-model="todo.completed">
+                    <span x-text="todo.text"></span>
+                </div>
+                <button @click="remove(todo.id)" class="delete-btn">&times;</button>
+            </li>
+        </template>
+    </ul>
+</div>
+
+<script>
+function todoWidget() {
+    return {
+        newTodo: '',
+        todos: JSON.parse(localStorage.getItem('todos') || '[]'),
+
+        init() {
+            this.$watch('todos', (value) => {
+                localStorage.setItem('todos', JSON.stringify(value));
+            });
+        },
+
+        add() {
+            if (this.newTodo.trim() === '') return;
+
+            this.todos.push({
+                id: Date.now(),
+                text: this.newTodo,
+                completed: false
+            });
+
+            this.newTodo = '';
+        },
+
+        remove(id) {
+            this.todos = this.todos.filter(todo => todo.id !== id);
+        }
+    }
+}
+</script>
+
+</body>
+</html>
