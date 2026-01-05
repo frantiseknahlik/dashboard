@@ -1,0 +1,81 @@
+<div class="f1">
+    <h3>🏁 F1 – nejbližší závod</h3>
+    <p id="gp"><span class="icon">🏎️</span></p>
+    <div id="cas"></div>
+</div>
+
+<style>
+.f1{
+    background: linear-gradient(145deg, #d0eaff, #a8d9ff);
+    color:#003049;
+    padding:18px;
+    border-radius:12px;
+    font-family:Arial;
+    transition:0.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    text-align:center;
+}
+.f1:hover{
+    transform:translateY(-5px) scale(1.02);
+    box-shadow:0 12px 25px rgba(0,0,0,0.3);
+}
+#cas{
+    margin-top:8px;
+    font-size:16px;
+    color:#0077cc;
+    font-weight:bold;
+}
+.icon{
+    margin-right:6px;
+}
+</style>
+
+<script>
+
+let kalendar=[
+{d:"2026-03-06",gp:"Australská GP"},
+{d:"2026-03-13",gp:"Čínská GP"},
+{d:"2026-03-27",gp:"Japonská GP"},
+{d:"2026-04-10",gp:"Bahrajn GP"},
+{d:"2026-04-17",gp:"Saúdská GP"},
+{d:"2026-05-01",gp:"Miami GP"},
+{d:"2026-05-22",gp:"Kanadská GP"},
+{d:"2026-06-05",gp:"Monaco GP"},
+{d:"2026-06-12",gp:"Barcelona GP"},
+{d:"2026-06-26",gp:"Rakousko GP"},
+{d:"2026-07-03",gp:"Britská GP"},
+{d:"2026-07-17",gp:"Belgie GP"},
+{d:"2026-07-24",gp:"Maďarsko GP"},
+{d:"2026-08-21",gp:"Nizozemsko GP"},
+{d:"2026-09-04",gp:"Itálie GP"},
+{d:"2026-09-11",gp:"Španělsko GP"},
+{d:"2026-09-24",gp:"Ázerbájdžán GP"},
+{d:"2026-10-09",gp:"Singapur GP"},
+{d:"2026-10-23",gp:"USA GP"},
+{d:"2026-10-30",gp:"Mexiko GP"},
+{d:"2026-11-06",gp:"Brazílie GP"},
+{d:"2026-11-19",gp:"Las Vegas GP"},
+{d:"2026-11-27",gp:"Qatar GP"},
+{d:"2026-12-04",gp:"Abu Dhabi GP"}
+];
+
+
+let ted=new Date();
+let dalsi=kalendar.find(e=> new Date(e.d) >= ted);
+if(!dalsi) dalsi=kalendar[kalendar.length-1];
+
+gp.innerHTML="🏎️ "+dalsi.gp;
+
+
+function upd(){
+    let t=new Date(dalsi.d) - new Date();
+    if(t<=0){cas.innerText="Právě probíhá";return}
+    let d=Math.floor(t/1000/60/60/24);
+    let h=Math.floor(t/1000/60/60%24);
+    let m=Math.floor(t/1000/60%60);
+    cas.innerText=d+"d "+h+"h "+m+"min";
+}
+
+upd();
+setInterval(upd,60000);
+</script>

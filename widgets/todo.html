@@ -1,61 +1,94 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <title>Todo Widget</title>
+<meta charset="UTF-8">
+<title>Todo Widget</title>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>
+body {
+    font-family: Arial;
+    background: #e6f2ff;
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+}
 
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+.todo-widget {
+    background: #99d6ff;
+    padding: 15px;
+    border-radius: 10px;
+    width: 250px;
+}
 
-    <style>
-        .input-group,
-        .todo-widget li,
-        .todo-item-content {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+h3 {
+    text-align: center;
+    margin: 0 0 10px 0;
+}
 
-        .todo-widget ul {
-            list-style: none;
-            padding: 0;
-        }
+.input-group {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
 
-        .completed span {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
+input {
+    flex: 1;
+    padding: 5px;
+}
 
-        .todo-widget button {
-            cursor: pointer;
-        }
+button {
+    padding: 5px 10px;
+    border: none;
+    background: #0288d1;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+}
 
-        .delete-btn {
-            margin-left: auto;
-        }
-    </style>
+button:hover {
+    background: #01579b;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 5px 8px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.completed span {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+</style>
 </head>
 <body>
 
 <div class="todo-widget" x-data="todoWidget()" x-init="init()">
     <h3>Úkoly</h3>
-
-    <!-- Vstupní pole -->
     <div class="input-group">
-        <input 
-            type="text"
-            x-model="newTodo"
-            @keyup.enter="add()"
-            placeholder="Nový úkol..."
-        >
+        <input type="text" x-model="newTodo" @keyup.enter="add()" placeholder="Nový úkol...">
         <button @click="add()">+</button>
     </div>
-
-    <!-- Seznam úkolů -->
     <ul>
         <template x-for="todo in todos" :key="todo.id">
             <li :class="{ 'completed': todo.completed }">
-                <div class="todo-item-content">
+                <div>
                     <input type="checkbox" x-model="todo.completed">
                     <span x-text="todo.text"></span>
                 </div>
@@ -72,20 +105,12 @@ function todoWidget() {
         todos: JSON.parse(localStorage.getItem('todos') || '[]'),
 
         init() {
-            this.$watch('todos', (value) => {
-                localStorage.setItem('todos', JSON.stringify(value));
-            });
+            this.$watch('todos', value => localStorage.setItem('todos', JSON.stringify(value)));
         },
 
         add() {
-            if (this.newTodo.trim() === '') return;
-
-            this.todos.push({
-                id: Date.now(),
-                text: this.newTodo,
-                completed: false
-            });
-
+            if (!this.newTodo.trim()) return;
+            this.todos.push({ id: Date.now(), text: this.newTodo, completed: false });
             this.newTodo = '';
         },
 
