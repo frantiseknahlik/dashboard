@@ -1,0 +1,140 @@
+<div id="moodWidget">
+    <div class="top">
+    <span>Jak se dnes cítíš?</span>
+    <input type="date" id="date">
+    </div>
+
+    <div class="moods">
+    <button>😄</button>
+    <button>🙂</button>
+    <button>😐</button>
+    <button>😕</button>
+    <button>😡</button>
+    </div>
+
+    <div class="history" id="history"></div>
+</div>
+
+<style>
+#moodWidget{
+    background:#d9efff;
+    padding:14px;
+    border-radius:16px;
+    box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    font-weight:600;
+}
+
+input{
+    border:none;
+    border-radius:6px;
+    padding:3px 6px;
+}
+
+.moods{
+    display:flex;
+    justify-content:space-between;
+    margin:12px 0;
+}
+
+.moods button{
+    font-size:26px;
+    border:none;
+    border-radius:10px;
+    background:#eef8ff;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.moods button:hover{
+    transform:scale(1.15);
+    background:#cfe9ff;
+}
+
+.active{
+    background:#9fd3ff;
+}
+
+.history{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+}
+
+.history div{
+    text-align:center;
+}
+
+.history span{
+    display:block;
+    font-size:18px;
+}
+</style>
+
+<script>
+var dateInput = document.getElementById("date");
+var historyDiv = document.getElementById("history");
+var moodButtons = document.querySelectorAll(".moods button");
+
+var storageName = "moodData";
+var moods = {};
+
+if (localStorage.getItem(storageName)) {
+    moods = JSON.parse(localStorage.getItem(storageName));
+}
+
+var today = new Date().toISOString().split("T")[0];
+dateInput.value = today;
+
+function saveMood(mood) {
+    var date = dateInput.value;
+    moods[date] = mood;
+    localStorage.setItem(storageName, JSON.stringify(moods));
+}
+
+function setActiveButton() {
+    moodButtons.forEach(function(btn){
+    btn.classList.remove("active");
+    if (moods[dateInput.value] === btn.innerText) {
+        btn.classList.add("active");
+    }
+    });
+}
+
+function showHistory() {
+    historyDiv.innerHTML = "";
+
+    for (var i = 6; i >= 0; i--) {
+    var d = new Date();
+    d.setDate(d.getDate() - i);
+
+    var key = d.toISOString().split("T")[0];
+    var day = document.createElement("div");
+
+    day.innerHTML =
+        d.toLocaleDateString("cs-CZ", { weekday: "short" }) +
+        "<span>" + (moods[key] || "–") + "</span>";
+
+    historyDiv.appendChild(day);
+    }
+}
+
+moodButtons.forEach(function(btn){
+    btn.onclick = function(){
+    saveMood(btn.innerText);
+    setActiveButton();
+    showHistory();
+    };
+});
+
+dateInput.onchange = function(){
+    setActiveButton();
+};
+
+setActiveButton();
+showHistory();
+</script>
