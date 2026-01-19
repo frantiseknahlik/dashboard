@@ -5,19 +5,14 @@
 <title>Todo Widget</title>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <style>
-body {
-    font-family: Arial;
-    background: #e6f2ff;
-    display: flex;
-    justify-content: center;
-    padding: 50px 0;
-}
+
 
 .todo-widget {
-    background: #99d6ff;
+    background: var(--widget-bg);
     padding: 15px;
     border-radius: 10px;
     width: 250px;
+    color: var(--text-color);
 }
 
 h3 {
@@ -75,6 +70,16 @@ li {
     color: red;
     cursor: pointer;
 }
+
+.add-btn {
+    background: var(--widget-bg);
+    color: var(--text-color);
+}
+
+.add-list{
+    background: var(--widget-bg);
+    color: var(--text-color);
+}
 </style>
 </head>
 <body>
@@ -82,12 +87,12 @@ li {
 <div class="todo-widget" x-data="todoWidget()" x-init="init()">
     <h3>Úkoly</h3>
     <div class="input-group">
-        <input type="text" x-model="newTodo" @keyup.enter="add()" placeholder="Nový úkol...">
+        <input type="text" x-model="newTodo" @keyup.enter="add()" placeholder="Nový úkol..." class="add-btn"> 
         <button @click="add()">+</button>
     </div>
     <ul>
         <template x-for="todo in todos" :key="todo.id">
-            <li :class="{ 'completed': todo.completed }">
+            <li :class="{ 'completed': todo.completed }" class="add-list">
                 <div>
                     <input type="checkbox" x-model="todo.completed">
                     <span x-text="todo.text"></span>

@@ -5,6 +5,7 @@
   <title>Osobní dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" id="theme-style" href="themes/light.css"
 </head>
 <body>
   <main id="dashboard" class="grid"></main>
@@ -22,7 +23,8 @@
       { name: 'todo', width: 'half'},
       { name: 'F1', width: 'half'},
       { name: 'fotografie', width: 'full'},
-      { name: 'mood-tracker', width: 'half'}
+      { name: 'mood-tracker', width: 'half'},
+      { name: 'theme-switcher', width: 'half'},
     ];
 
     async function loadWidgets() {
